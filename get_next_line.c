@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:44:07 by aautin            #+#    #+#             */
-/*   Updated: 2023/11/23 17:28:11 by aautin           ###   ########.fr       */
+/*   Updated: 2023/11/23 21:51:59 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static char	*ft_get_afterline(char *str)
 	substr[i] = '\0';
 	while (--i >= 0)
 		substr[i] = str[i];
+	free(str);
 	return (substr);
 }
 
@@ -81,7 +82,7 @@ char	*get_next_line(int fd)
 	{
 		temp = ft_strjoin(line, "");
 		free(line);
-		if (read(fd, buffer_str, BUFFER_SIZE) == -1)
+		if (read(fd, buffer_str, BUFFER_SIZE) < 0)
 		{
 			line = ft_strjoin(temp, buffer_str);
 			free(temp);
@@ -96,6 +97,5 @@ char	*get_next_line(int fd)
 	}
 	temp = ft_get_afterline(buffer_str);
 	line = ft_get_beforeline(line);
-	free(buffer_str);
 	return (line);
 }
