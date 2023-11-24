@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:45:04 by aautin            #+#    #+#             */
-/*   Updated: 2023/11/23 17:37:50 by aautin           ###   ########.fr       */
+/*   Updated: 2023/11/24 19:53:26 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 # define BUFFER_SIZE 1000
 
 #endif
-
+void	ft_free(void *mem);
 size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin(char *s1, char *s2, char free);
 char	*get_next_line(int fd);
 
 #endif

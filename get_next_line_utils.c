@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:44:11 by aautin            #+#    #+#             */
-/*   Updated: 2023/11/23 21:45:13 by aautin           ###   ########.fr       */
+/*   Updated: 2023/11/24 22:09:17 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ char	*ft_strchr(const char *s, int c)
 	int		i;
 
 	i = 0;
+	if (!s)
+		return (NULL);
 	while (s[i])
 	{
 		if (s[i] == (char) c)
@@ -40,7 +42,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2, char freed)
 {
 	char	*str;
 	int		i;
@@ -51,18 +53,16 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
-	i = 0;
-	while (s1[i])
-	{
+	i = -1;
+	while (s1[++i])
 		str[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (s2[j])
-	{
+	j = -1;
+	while (s2[++j])
 		str[i + j] = s2[j];
-		j++;
-	}
 	str[i + j] = '\0';
+	if ((freed == 1 || freed == 3) && s1)
+		free(s1);
+	if ((freed == 2 || freed == 3) && s2)
+		free(s2);
 	return (str);
 }
