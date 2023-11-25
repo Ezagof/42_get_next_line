@@ -6,18 +6,16 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:44:07 by aautin            #+#    #+#             */
-/*   Updated: 2023/11/24 22:09:17 by aautin           ###   ########.fr       */
+/*   Updated: 2023/11/25 23:14:28 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*ft_get_afterline(char *str, char freed)
+static void	ft_get_afterline(char *str, char *substr)
 {
-	int		i;
-	int		len;
-	int		start;
-	char	*substr;
+	size_t	start;
+	size_t	len;
 
 	start = 0;
 	while (str[start] != '\n' && str[start])
@@ -25,44 +23,30 @@ static char	*ft_get_afterline(char *str, char freed)
 	if (str[start])
 		start++;
 	len = 0;
-	while (str[len + start])
-		len++;
-	substr = (char *)malloc((len + 1) * sizeof(char));
-	if (!substr)
+	while (str[start + len])
 	{
-		if (freed && str)
-			free(str);
-		return (NULL);
+		substr[len] = str[start + len];
+		len++;
 	}
 	substr[len] = '\0';
-	i = 0;
-	while (i < len)
-	{
-		substr[i] = str[i + len];
-		i++;
-	}
-	if (freed && str)
-		free(str);
-	return (substr);
 }
 
 static char	*ft_get_beforeline(char *str, char freed)
 {
-	int		i;
-	int		len;
+	size_t	i;
+	size_t	len;
 	char	*substr;
 
 	len = 0;
 	while (str[len] != '\n' && str[len])
 		len++;
-	if (str[len])
-		len++;
-	substr = (char *)malloc((len + 1) * sizeof(char));
+	substr = (char *)malloc((len + 2) * sizeof(char));
 	if (!substr)
 		return (NULL);
-	substr[len] = '\0';
+	substr[len] = '\n';
+	substr[len + 1] = '\0';
 	i = 0;
-	while (i < len)
+	while (i < len && str[i])
 	{
 		substr[i] = str[i];
 		i++;
@@ -72,64 +56,58 @@ static char	*ft_get_beforeline(char *str, char freed)
 	return (substr);
 }
 
-static long int	ft_read_and_protect(int fd, char *buffer_str, long int size)
+static size_t	ft_read_and_protect(int fd, char *buffer_str)
 {
-	long int readchars_nb;
+	size_t readchars;
 
-	readchars_nb = read(fd, buffer_str, size);
-	if (readchars_nb < 0)
+	readchars = read(fd, buffer_str, BUFFER_SIZE);
+	if (readchars <= 0)
 		buffer_str[0] = '\0';
 	else
-		buffer_str[readchars_nb] = '\0';
-	return (readchars_nb);
+		buffer_str[readchars] = '\0';
+	return (readchars);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*buffer_str;
+	static char	buffer_str[BUFFER_SIZE + 1];
 	char		*line;
-	static char	*temp;
-	int			readchars;
+	long int	readchars;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-	{
-		if (temp)
-			free(temp);
 		return (NULL);
-	}
-	if (temp != NULL)
-		line = ft_strjoin(temp, "\0", 1);
+	if (buffer_str[0] != '\0')
+		line = ft_strjoin(buffer_str, "", 0);
 	else
-		line = ft_strjoin("\0", "\0", 0);
+		line = ft_strjoin("", "", 0);
 	while (!ft_strchr(line, '\n'))
 	{
-		buffer_str = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-		if (!buffer_str)
+		readchars = ft_read_and_protect(fd, buffer_str);
+		if (readchars == -1 && readchars == 0)
 		{
 			free(line);
 			return (NULL);
 		}
-		readchars = ft_read_and_protect(fd, buffer_str, BUFFER_SIZE);
-		if (readchars <= 0)
-		{
-			free(buffer_str);
-			free(line);
-			return (NULL);
-		}
-		line = ft_strjoin(line, buffer_str, 3);
+		line = ft_strjoin(line, buffer_str, 1);
 		if (readchars != BUFFER_SIZE)
 		{
-			if (!ft_strchr(line, '\n'))
-				line = ft_strjoin(line, "\n", 1);
+			if (ft_strchr(line, '\n'))
+			{
+				ft_get_afterline(line, buffer_str);
+				return (ft_get_beforeline(line, 1));
+			}
 			else
 			{
-				temp = ft_get_afterline(line, 0);
-				line = ft_get_beforeline(line, 1);
+				if (line[0])
+					return (line);
+				else
+				{
+					free(line);
+					return (NULL);
+				}
 			}
-			return (line);
 		}
 	}
-	temp = ft_get_afterline(line, 0);
-	line = ft_get_beforeline(line, 1);
-	return (line);
+	ft_get_afterline(line, buffer_str);
+	return (ft_get_beforeline(line, 1));
 }

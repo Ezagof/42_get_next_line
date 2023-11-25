@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:45:04 by aautin            #+#    #+#             */
-/*   Updated: 2023/11/24 19:53:26 by aautin           ###   ########.fr       */
+/*   Updated: 2023/11/25 16:22:57 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 # include <stdio.h>
 
 # ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1000
+#  define BUFFER_SIZE 80
+# endif
 
-#endif
 void	ft_free(void *mem);
 size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
