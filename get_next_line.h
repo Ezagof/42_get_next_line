@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:45:04 by aautin            #+#    #+#             */
-/*   Updated: 2023/11/28 21:00:05 by aautin           ###   ########.fr       */
+/*   Updated: 2023/12/12 20:48:02 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 80
+# endif
+# if BUFFER_SIZE > 2147648000
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 0
 # endif
 
 void	ft_free(void *mem);
