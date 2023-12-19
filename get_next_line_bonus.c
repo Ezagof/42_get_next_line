@@ -81,6 +81,7 @@ static char	*ft_notbuffsizeread(int sz, int fd, char **buffer_str, char *line)
 	{
 		if (!line[0] && !buffer_str[fd][0])
 		{
+			free(buffer_str[fd]);
 			free(line);
 			return (NULL);
 		}
