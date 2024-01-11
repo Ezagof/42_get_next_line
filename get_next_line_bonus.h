@@ -5,27 +5,31 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/23 12:45:04 by aautin            #+#    #+#             */
-/*   Updated: 2023/11/28 21:00:40 by aautin           ###   ########.fr       */
+/*   Created: 2024/01/09 16:37:08 by aautin            #+#    #+#             */
+/*   Updated: 2024/01/11 17:19:12 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_BONUS_H
 # define GET_NEXT_LINE_BONUS_H
 
-# include <stdlib.h>
 # include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
 # include <fcntl.h>
+# include <stddef.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 80
+#  define BUFFER_SIZE 142
 # endif
 
-void	ft_free(void *mem);
-size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c);
-char	*ft_freenullreturn(char *s1, char *s2);
-char	*ft_strjoin(char *s1, char *s2, char free);
+// get_next_line_utils_bonus.c
+char	*string_chr(char *str, char letter);
+
+// get_next_line_bonus.c
+char	*string_join(char *s1, char *s2, char flag);
+void	set_string_after_newline(char *buffer);
+char	*turn_string_into_firstline(char *temp);
 char	*get_next_line(int fd);
 
 #endif
